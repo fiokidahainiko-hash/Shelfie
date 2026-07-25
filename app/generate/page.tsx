@@ -1,132 +1,173 @@
-"use client";
+import Link from "next/link";
 
-import { useState } from "react";
+const steps = [
+  {
+    code: "00:00:01",
+    title: "Drop in a product",
+    body: "One photo or a link to your listing. No shoot, no shipping a sample to a creator.",
+  },
+  {
+    code: "00:00:14",
+    title: "Pick a voice, write an angle",
+    body: "Choose an AI presenter and a hook — or let the script writer draft three angles to test.",
+  },
+  {
+    code: "00:00:42",
+    title: "Render, caption, ship",
+    body: "Cut for TikTok, Reels, and Feed in one pass. Export and push straight to your ad account.",
+  },
+];
 
-type Status = "idle" | "queued" | "rendering" | "done" | "error";
+const models = [
+  "Runway Gen-4",
+  "Veo 3",
+  "Kling 3.0",
+  "Luma Dream Machine",
+  "Sora 2",
+  "HeyGen Avatars",
+];
 
-export default function GeneratePage() {
-  const [productUrl, setProductUrl] = useState("");
-  const [script, setScript] = useState("");
-  const [model, setModel] = useState("kling-3");
-  const [status, setStatus] = useState<Status>("idle");
-  const [resultUrl, setResultUrl] = useState<string | null>(null);
-
-  async function handleGenerate(e: React.FormEvent) {
-    e.preventDefault();
-    setStatus("queued");
-    setResultUrl(null);
-
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productUrl, script, model }),
-      });
-      const data = await res.json();
-
-      setStatus("rendering");
-      setTimeout(() => {
-        setResultUrl(data.previewUrl);
-        setStatus("done");
-      }, 1500);
-    } catch {
-      setStatus("error");
-    }
-  }
-
+export default function Home() {
   return (
-    <main className="min-h-screen bg-ink px-6 md:px-12 py-12">
-      <p className="timecode text-xs text-ember mb-2">STUDIO</p>
-      <h1 className="font-display text-3xl md:text-4xl text-bone mb-8">
-        New UGC take
-      </h1>
+    <main className="min-h-screen bg-ink">
+      {/* nav */}
+      <nav className="flex items-center justify-between px-6 md:px-12 py-6 border-b border-rail">
+        <span className="font-display text-xl tracking-tight text-bone">
+          Shelfie
+        </span>
+        <div className="hidden md:flex items-center gap-8 text-sm text-mute">
+          <a href="#how" className="hover:text-bone transition-colors">
+            How it works
+          </a>
+          <a href="#models" className="hover:text-bone transition-colors">
+            Models
+          </a>
+          <a href="#pricing" className="hover:text-bone transition-colors">
+            Pricing
+          </a>
+        </div>
+        <Link
+          href="/generate"
+          className="text-sm px-4 py-2 rounded-full bg-amber text-ink font-medium hover:bg-bone transition-colors"
+        >
+          Open studio
+        </Link>
+      </nav>
 
-      <div className="grid md:grid-cols-2 gap-10 max-w-4xl">
-        <form onSubmit={handleGenerate} className="space-y-6">
-          <div>
-            <label className="timecode text-xs text-mute block mb-2">
-              PRODUCT URL OR IMAGE LINK
-            </label>
-            <input
-              required
-              value={productUrl}
-              onChange={(e) => setProductUrl(e.target.value)}
-              placeholder="https://yourstore.com/products/..."
-              className="w-full bg-panel border border-rail rounded-lg px-4 py-3 text-bone placeholder:text-mute focus:outline-none focus:border-amber"
-            />
-          </div>
-
-          <div>
-            <label className="timecode text-xs text-mute block mb-2">
-              SCRIPT OR HOOK
-            </label>
-            <textarea
-              required
-              value={script}
-              onChange={(e) => setScript(e.target.value)}
-              rows={4}
-              placeholder="Okay so I was skeptical about this at first, but..."
-              className="w-full bg-panel border border-rail rounded-lg px-4 py-3 text-bone placeholder:text-mute focus:outline-none focus:border-amber resize-none"
-            />
-          </div>
-
-          <div>
-            <label className="timecode text-xs text-mute block mb-2">
-              MODEL
-            </label>
-            <select
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              className="w-full bg-panel border border-rail rounded-lg px-4 py-3 text-bone focus:outline-none focus:border-amber"
-            >
-              <option value="kling-3">Kling 3.0</option>
-              <option value="veo-3">Veo 3</option>
-              <option value="runway-gen4">Runway Gen-4</option>
-              <option value="heygen-avatar">HeyGen Avatar</option>
-            </select>
-          </div>
-
-          <button
-            type="submit"
-            disabled={status === "queued" || status === "rendering"}
-            className="w-full px-6 py-3 rounded-full bg-amber text-ink font-medium hover:bg-bone transition-colors disabled:opacity-50"
+      {/* hero */}
+      <section className="px-6 md:px-12 pt-16 md:pt-24 pb-20">
+        <p className="timecode text-xs text-ember mb-4">SHELFIE / AD STUDIO</p>
+        <h1 className="font-display text-4xl md:text-6xl leading-[1.05] text-bone max-w-3xl">
+          Splice a product photo into an ad that looks shot by a real creator.
+        </h1>
+        <p className="text-mute max-w-xl mt-6 text-lg">
+          Shelfie turns a single image into UGC-style video ads — scripted, voiced,
+          and cut for TikTok, Reels, and Feed — without booking a creator or a
+          studio day.
+        </p>
+        <div className="flex flex-wrap gap-4 mt-8">
+          <Link
+            href="/generate"
+            className="px-6 py-3 rounded-full bg-amber text-ink font-medium hover:bg-bone transition-colors"
           >
-            {status === "idle" && "Generate"}
-            {status === "queued" && "Queuing take…"}
-            {status === "rendering" && "Rendering…"}
-            {status === "done" && "Generate another"}
-            {status === "error" && "Try again"}
-          </button>
-        </form>
+            Generate your first ad
+          </Link>
+          
+            href="#how"
+            className="px-6 py-3 rounded-full border border-rail text-bone hover:border-mute transition-colors"
+          >
+            See how it works
+          </a>
+        </div>
 
-        <div className="border border-rail rounded-2xl bg-panel p-6 flex flex-col">
-          <p className="timecode text-xs text-mute mb-4">PREVIEW</p>
-          <div className="flex-1 aspect-[9/16] max-h-[420px] rounded-lg border border-rail bg-gradient-to-b from-rail to-panel flex items-center justify-center">
-            {status === "idle" && (
-              <p className="text-mute text-sm px-6 text-center">
-                Your rendered take will appear here.
-              </p>
-            )}
-            {(status === "queued" || status === "rendering") && (
-              <p className="timecode text-xs text-ember animate-pulse">
-                {status === "queued" ? "QUEUED…" : "RENDERING…"}
-              </p>
-            )}
-            {status === "done" && resultUrl && (
-              <p className="text-bone text-sm px-6 text-center">
-                Mock render ready — wire a real model API into{" "}
-                <code className="text-ember">/app/api/generate</code> to
-                return an actual video URL.
-              </p>
-            )}
-            {status === "error" && (
-              <p className="text-ember text-sm px-6 text-center">
-                Something went wrong. Try again.
-              </p>
-            )}
+        {/* filmstrip / signature element */}
+        <div className="mt-16 overflow-hidden rounded-2xl border border-rail bg-panel">
+          <div className="flex items-center gap-1 px-4 py-2 border-b border-rail">
+            {Array.from({ length: 24 }).map((_, i) => (
+              <span key={i} className="w-1.5 h-3 rounded-sm bg-rail" />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-rail">
+            {[
+              { label: "SOURCE", desc: "Product photo, as uploaded" },
+              { label: "TAKE 01", desc: "AI presenter holds the product" },
+              { label: "FINAL CUT", desc: "Captioned, scored, ready to run" },
+            ].map((frame) => (
+              <div key={frame.label} className="p-8">
+                <p className="timecode text-xs text-ember mb-3">
+                  {frame.label}
+                </p>
+                <div className="aspect-[9/16] max-w-[180px] rounded-lg bg-gradient-to-b from-rail to-panel border border-rail mb-4" />
+                <p className="text-sm text-mute">{frame.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center gap-1 px-4 py-2 border-t border-rail">
+            {Array.from({ length: 24 }).map((_, i) => (
+              <span key={i} className="w-1.5 h-3 rounded-sm bg-rail" />
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* how it works */}
+      <section id="how" className="px-6 md:px-12 py-20 border-t border-rail">
+        <p className="timecode text-xs text-ember mb-4">HOW IT WORKS</p>
+        <h2 className="font-display text-3xl md:text-4xl text-bone mb-12 max-w-xl">
+          Three cuts, start to finish.
+        </h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          {steps.map((step) => (
+            <div key={step.code} className="border-t border-rail pt-6">
+              <p className="timecode text-xs text-mute mb-3">{step.code}</p>
+              <h3 className="font-display text-xl text-bone mb-2">
+                {step.title}
+              </h3>
+              <p className="text-mute text-sm">{step.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* models */}
+      <section id="models" className="px-6 md:px-12 py-20 border-t border-rail">
+        <p className="timecode text-xs text-ember mb-4">UNDER THE HOOD</p>
+        <h2 className="font-display text-3xl md:text-4xl text-bone mb-10 max-w-xl">
+          One credit pool, every top rendering engine.
+        </h2>
+        <div className="flex flex-wrap gap-3">
+          {models.map((m) => (
+            <span
+              key={m}
+              className="timecode text-xs px-4 py-2 rounded-full border border-rail text-mute"
+            >
+              {m}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* pricing teaser */}
+      <section id="pricing" className="px-6 md:px-12 py-20 border-t border-rail">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <p className="timecode text-xs text-ember mb-4">PRICING</p>
+            <h2 className="font-display text-3xl md:text-4xl text-bone max-w-lg">
+              Plans that scale with how many ads you're testing.
+            </h2>
+          </div>
+          <Link
+            href="/generate"
+            className="shrink-0 px-6 py-3 rounded-full bg-amber text-ink font-medium hover:bg-bone transition-colors w-fit"
+          >
+            Start free
+          </Link>
+        </div>
+      </section>
+
+      <footer className="px-6 md:px-12 py-10 border-t border-rail text-mute text-xs timecode">
+        © {new Date().getFullYear()} SHELFIE STUDIO
+      </footer>
     </main>
   );
 }
