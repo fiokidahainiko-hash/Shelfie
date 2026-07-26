@@ -88,4 +88,81 @@ export default function Home() {
               { label: "TAKE 01", desc: "AI presenter holds the product" },
               { label: "FINAL CUT", desc: "Captioned, scored, ready to run" },
             ].map((frame) => (
-              <div
+              <div key={frame.label} className="p-8">
+                <p className="timecode text-xs text-ember mb-3">
+                  {frame.label}
+                </p>
+                <div className="aspect-[9/16] max-w-[180px] rounded-lg bg-gradient-to-b from-rail to-panel border border-rail mb-4" />
+                <p className="text-sm text-mute">{frame.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center gap-1 px-4 py-2 border-t border-rail">
+            {Array.from({ length: 24 }).map((_, i) => (
+              <span key={i} className="w-1.5 h-3 rounded-sm bg-rail" />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* how it works */}
+      <section id="how" className="px-6 md:px-12 py-20 border-t border-rail">
+        <p className="timecode text-xs text-ember mb-4">HOW IT WORKS</p>
+        <h2 className="font-display text-3xl md:text-4xl text-bone mb-12 max-w-xl">
+          Three cuts, start to finish.
+        </h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          {steps.map((step) => (
+            <div key={step.code} className="border-t border-rail pt-6">
+              <p className="timecode text-xs text-mute mb-3">{step.code}</p>
+              <h3 className="font-display text-xl text-bone mb-2">
+                {step.title}
+              </h3>
+              <p className="text-mute text-sm">{step.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* models */}
+      <section id="models" className="px-6 md:px-12 py-20 border-t border-rail">
+        <p className="timecode text-xs text-ember mb-4">UNDER THE HOOD</p>
+        <h2 className="font-display text-3xl md:text-4xl text-bone mb-10 max-w-xl">
+          One credit pool, every top rendering engine.
+        </h2>
+        <div className="flex flex-wrap gap-3">
+          {models.map((m) => (
+            <span
+              key={m}
+              className="timecode text-xs px-4 py-2 rounded-full border border-rail text-mute"
+            >
+              {m}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* pricing teaser */}
+      <section id="pricing" className="px-6 md:px-12 py-20 border-t border-rail">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <p className="timecode text-xs text-ember mb-4">PRICING</p>
+            <h2 className="font-display text-3xl md:text-4xl text-bone max-w-lg">
+              Plans that scale with how many ads you're testing.
+            </h2>
+          </div>
+          <Link
+            href="/generate"
+            className="shrink-0 px-6 py-3 rounded-full bg-amber text-ink font-medium hover:bg-bone transition-colors w-fit"
+          >
+            Start free
+          </Link>
+        </div>
+      </section>
+
+      <footer className="px-6 md:px-12 py-10 border-t border-rail text-mute text-xs timecode">
+        © {new Date().getFullYear()} SHELFIE STUDIO
+      </footer>
+    </main>
+  );
+}
